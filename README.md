@@ -1,1 +1,2 @@
 # EasyDoc-Web
+Um site criado para facilitar a gestão e a criação de ordens de serviço, orçamentos e outros documentos, pensado especialmente para autônomos e pequenos empreendedores, priorizando usabilidade e simplicidade. Este repositório contém o Back-end do projeto [EasyDoc-app](https://github.com/N1ck120/EasyDoc-app), desenvolvido em Java com SpringBoot, para oferecer um sistema de login e armazenamento em nuvem.
