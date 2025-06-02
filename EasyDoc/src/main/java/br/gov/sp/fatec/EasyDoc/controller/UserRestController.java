@@ -16,19 +16,19 @@ public class UserRestController {
     private UserRepository ur;
 
     // Consultar todos os usuários
-    @GetMapping()
+    @GetMapping("/consultar")
     public List<User> listar() {
         return ur.findAll();
     }
 
     // Criar novos usuários
-    @PostMapping()
+    @PostMapping("/cadastrar")
     public User criar(@RequestBody User user) {
         return ur.save(user);
     }
 
     // Atualizar dados do usuário
-    @PutMapping("/{email}")
+    @PutMapping("/atualizar/{email}")
     public ResponseEntity<User> atualizar(@PathVariable String email, @RequestBody User dados) {
         return ur.findByEmail(email).map(user -> {
             user.setNome(dados.getNome());
@@ -40,7 +40,7 @@ public class UserRestController {
     }
 
     // Deletar usuários
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/deletar/{email}")
     public ResponseEntity<Void> deletar(@PathVariable String email) {
         return ur.findByEmail(email).<ResponseEntity<Void>>map(user -> {
             ur.delete(user);

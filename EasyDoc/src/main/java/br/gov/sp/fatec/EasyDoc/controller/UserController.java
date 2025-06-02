@@ -2,10 +2,12 @@ package br.gov.sp.fatec.EasyDoc.controller;
 
 import br.gov.sp.fatec.EasyDoc.model.User;
 import br.gov.sp.fatec.EasyDoc.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/user")
@@ -17,7 +19,14 @@ public class UserController {
     // PÁGINA INICIAL
 
     @GetMapping("/home")
-    public String home() {
+    public String home(HttpSession session, Model model) {
+
+        User user = (User) session.getAttribute("userLogado");
+
+        if (user != null) {
+            model.addAttribute("userLogado", user);
+        }
+
         System.out.println("Página Inicial");
         return "home";
     }
@@ -35,7 +44,7 @@ public class UserController {
     public String salvar(@ModelAttribute User user) {
         ur.save(user);
         System.out.println("Novo Usuário Salvo");
-        return "redirect:/user/cadastro";
+        return "redirect:/user/login";
     }
 
     // FAZER LOGIN DE USUARIOS
@@ -49,18 +58,19 @@ public class UserController {
     @PostMapping("/login")
     public String verificarLogin(@RequestParam String email,
                                  @RequestParam String senha,
-                                 Model model) {
+                                 HttpSession session,
+                                 RedirectAttributes ra) {
 
         User user = ur.findByEmail(email).orElse(null);
 
         if (user != null && user.getSenha().equals(senha)) {
-            model.addAttribute("userLogado", user);
+            session.setAttribute("userLogado", user);
             System.out.println("Usuáiro Logado com Sucesso");
-            return "redirect:/home";
+            return "redirect:/user/home";
         } else {
-            model.addAttribute("erro", "E-mail ou senha inválidos.");
+            ra.addFlashAttribute("erro", "E-mail ou senha inválidos.");
             System.out.println("Erro ao Executar o Login");
-            return "login";
+            return "redirect:/user/login";
         }
     }
 }

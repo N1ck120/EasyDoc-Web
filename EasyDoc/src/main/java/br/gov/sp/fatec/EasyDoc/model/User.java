@@ -15,6 +15,9 @@ public class User {
     private String email;
     private String senha;
 
+    // SEGURANÇA
+    private String salt;
+
     // Id
     public Long getId() {
         return id;
